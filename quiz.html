@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SDGs 3 - 건강과 웰빙 퀴즈</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+      background: #f0f4f8;
+    }
+    .card {
+      background: white;
+      border-radius: 12px;
+      padding: 2rem;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      text-align: center;
+      max-width: 500px;
+      width: 90%;
+    }
+    h1 { font-size: 1.4rem; color: #1e3a5f; }
+    .question { font-size: 1.1rem; margin: 1.5rem 0; }
+    .number { color: #3b82f6; font-weight: bold; }
+    .choices { display: flex; flex-direction: column; gap: 0.5rem; }
+    .choices button {
+      padding: 0.8rem;
+      font-size: 1rem;
+      border: 2px solid #e2e8f0;
+      border-radius: 8px;
+      background: white;
+      cursor: pointer;
+      text-align: left;
+    }
+    .choices button:hover { border-color: #3b82f6; background: #eff6ff; }
+    .correct { border-color: #22c55e !important; background: #f0fdf4 !important; }
+    .wrong { border-color: #ef4444 !important; background: #fef2f2 !important; }
+    #score {
+      margin-top: 1.5rem;
+      font-size: 1.2rem;
+      font-weight: bold;
+      color: #1e3a5f;
+    }
+    .nav { margin-top: 1rem; }
+    .nav button {
+      padding: 0.6rem 1.5rem;
+      font-size: 1rem;
+      border: none;
+      border-radius: 8px;
+      background: #3b82f6;
+      color: white;
+      cursor: pointer;
+    }
+    .nav button:hover { background: #2563eb; }
+    .nav button:disabled { background: #94a3b8; cursor: default; }
+    a { color: #3b82f6; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>SDGs 3 — 건강과 웰빙 퀴즈</h1>
+    <p class="question">
+      <span class="number" id="qNum"></span>
+      <span id="qText"></span>
+    </p>
+    <div class="choices" id="choices"></div>
+    <p id="score"></p>
+    <div class="nav">
+      <button id="nextBtn" onclick="nextQuestion()" disabled>다음 문제 →</button>
+    </div>
+    <p style="margin-top:1rem;"><a href="index.html">← 메인으로</a></p>
+  </div>
+
+  <script>
+    const quizData = [
+      {
+        q: "SDGs 3번의 공식 명칭은?",
+        choices: ["양질의 교육", "건강과 웰빙", "깨끗한 물과 위생", "기아 종식"],
+        answer: 1
+      },
+      {
+        q: "WHO에 따르면, 전 세계에서 매년 대기오염으로 조기 사망하는 인구는?",
+        choices: ["약 100만 명", "약 400만 명", "약 700만 명", "약 1000만 명"],
+        answer: 2
+      },
+      {
+        q: "SDGs 3번이 2030년까지 달성하려는 목표가 아닌 것은?",
+        choices: [
+          "모성 사망률 감소",
+          "전염병 퇴치",
+          "모든 국가에 무상 의료 도입",
+          "약물 남용 예방 및 치료 강화"
+        ],
+        answer: 2
+      }
+    ];
+
+    let current = 0;
+    let score = 0;
+    let answered = false;
+
+    function loadQuestion() {
+      const data = quizData[current];
+      document.getElementById("qNum").textContent = `Q${current + 1}.`;
+      document.getElementById("qText").textContent = data.q;
+
+      const box = document.getElementById("choices");
+      box.innerHTML = "";
+      answered = false;
+      document.getElementById("nextBtn").disabled = true;
+
+      data.choices.forEach((text, i) => {
+        const btn = document.createElement("button");
+        btn.textContent = text;
+        btn.onclick = () => checkAnswer(i, btn);
+        box.appendChild(btn);
+      });
+    }
+
+    function checkAnswer(selected, btn) {
+      if (answered) return;
+      answered = true;
+
+      const buttons = document.querySelectorAll(".choices button");
+      const correct = quizData[current].answer;
+
+      if (selected === correct) {
+        btn.classList.add("correct");
+        score++;
+      } else {
+        btn.classList.add("wrong");
+        buttons[correct].classList.add("correct");
+      }
+
+      document.getElementById("score").textContent = `현재 점수: ${score} / ${current + 1}`;
+
+      if (current < quizData.length - 1) {
+        document.getElementById("nextBtn").disabled = false;
+        document.getElementById("nextBtn").textContent = "다음 문제 →";
+      } else {
+        document.getElementById("nextBtn").disabled = false;
+        document.getElementById("nextBtn").textContent = "결과 보기";
+      }
+    }
+
+    function nextQuestion() {
+      if (current < quizData.length - 1) {
+        current++;
+        loadQuestion();
+      } else {
+        document.querySelector(".card").innerHTML = `
+          <h1>퀴즈 완료!</h1>
+          <p style="font-size:3rem;">${score === quizData.length ? "🎉" : "📚"}</p>
+          <p style="font-size:1.3rem;">${quizData.length}문제 중 <strong>${score}문제</strong> 정답</p>
+          <p style="margin-top:1rem;">
+            <a href="quiz.html">다시 풀기</a> · <a href="index.html">메인으로</a>
+          </p>`;
+      }
+    }
+
+    loadQuestion();
+  </script>
+</body>
+</html>
