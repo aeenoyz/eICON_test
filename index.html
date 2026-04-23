@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>나의 첫 웹앱</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+      background: #f0f4f8;
+    }
+    .card {
+      background: white;
+      border-radius: 12px;
+      padding: 2rem;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+    button {
+      margin-top: 1rem;
+      padding: 0.8rem 1.5rem;
+      font-size: 1rem;
+      border: none;
+      border-radius: 8px;
+      background: #3b82f6;
+      color: white;
+      cursor: pointer;
+    }
+    button:hover { background: #2563eb; }
+    #result { margin-top: 1rem; font-size: 1.2rem; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>SDGs 건강 퀴즈</h1>
+    <p id="question">WHO가 정의하는 건강이란?</p>
+    <button onclick="showAnswer()">정답 보기</button>
+    <p id="result"></p>
+  </div>
+  <script>
+    function showAnswer() {
+      document.getElementById('result').textContent =
+        '단순히 질병이 없는 상태가 아니라, 신체적·정신적·사회적으로 완전한 안녕 상태';
+    }
+  </script>
+</body>
+</html>
